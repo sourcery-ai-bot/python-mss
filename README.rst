@@ -1,3 +1,12 @@
+Branch **linux-clear-invisible-area**
+
+The purpose of this branch is to speed up MSSLinux when there is several monitors and non visible areas with old/random values. See what I mean:
+
+.. image:: http://i.stack.imgur.com/n7l8k.jpg
+:target: http://stackoverflow.com/questions/29759469/xlib-pixels-out-of-visibility
+
+----
+
 ***********************************************************************************
 A very fast cross-platform multiple screenshots module in pure python using ctypes
 ***********************************************************************************
