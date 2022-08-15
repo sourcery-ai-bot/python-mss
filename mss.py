@@ -172,7 +172,7 @@ class MSS(object):
 
         # Monitors screen shots!
         for i, monitor in enumerate(self.enum_display_monitors(screen)):
-            if screen <= 0 or (screen > 0 and i + 1 == screen):
+            if screen <= 0 or i + 1 == screen:
                 fname = output
                 if '%d' in output:
                     fname = output.replace('%d', str(i + 1))
@@ -579,8 +579,7 @@ class MSSWindows(MSS):
             monitors = []
             callback = self.MONITORENUMPROC(_callback)
             windll.user32.EnumDisplayMonitors(0, 0, callback, 0)
-            for mon in monitors:
-                yield mon
+            yield from monitors
 
     def get_pixels(self, monitor):
         ''' Retrieve all pixels from a monitor. Pixels have to be RGB.
@@ -628,8 +627,11 @@ class MSSWindows(MSS):
                 windll.gdi32.DeleteObject(bmp)
 
         # Replace pixels values: BGR to RGB
-        self.image[2:buffer_len:3], self.image[0:buffer_len:3] = \
-            self.image[0:buffer_len:3], self.image[2:buffer_len:3]
+        self.image[2:buffer_len:3], self.image[:buffer_len:3] = (
+            self.image[:buffer_len:3],
+            self.image[2:buffer_len:3],
+        )
+
         return self.image
 
 
@@ -663,7 +665,7 @@ def main():
         from os import rename
         from os.path import isfile
         if isfile(fname):
-            newfile = fname + '.old'
+            newfile = f'{fname}.old'
             print('{0} -> {1}'.format(fname, newfile))
             rename(fname, newfile)
         return True
